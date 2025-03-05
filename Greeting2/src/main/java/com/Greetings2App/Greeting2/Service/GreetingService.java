@@ -3,6 +3,7 @@ package com.Greetings2App.Greeting2.Service;
 import com.Greetings2App.Greeting2.Models.Greetings;
 import com.Greetings2App.Greeting2.Repository.GreetingRepository;
 import org.springframework.stereotype.Service;
+import java.util.*;
 
 @Service
 public class GreetingService {
@@ -40,6 +41,18 @@ public class GreetingService {
     public Greetings getGreetingById(Long id){
         return greetingRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Couldn't find greeting with id"+id));
+}
+    public List<Greetings> getAllGreetings(){
+        return greetingRepository.findAll();
+}
+    public Greetings updateGreeting(Long id,String newMessage){
+        Optional<Greetings> existingGreeting = greetingRepository.findById(id);
+        if(existingGreeting.isPresent()){
+            Greetings greetings=existingGreeting.get();
+            greetings.setMessage(newMessage);
+            return greetingRepository.save(greetings);
+        }
+        throw new RuntimeException(("Greeting with Id " + id +"notfound"));
 }
 
 }
